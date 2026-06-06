@@ -8,12 +8,6 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const chunks = [];
-    for await (const chunk of req) {
-      chunks.push(chunk);
-    }
-    const rawBody = Buffer.concat(chunks).toString("utf-8");
-
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -21,7 +15,7 @@ module.exports = async function handler(req, res) {
         "x-api-key": process.env.ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01",
       },
-      body: rawBody,
+      body: JSON.stringify(req.body),
     });
 
     const data = await response.json();
