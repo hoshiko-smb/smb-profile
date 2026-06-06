@@ -330,7 +330,7 @@ function ChatMode({onDone,onBack}) {
       :"ユーザーが「"+cur.id+"」に答えました：「"+text+"」\n\n回答が十分なら「ありがとうございます！」と述べてから次の質問「Q"+(qi+2)+"："+nxt.q+"（ヒント："+nxt.hint+"）」を提示してください。情報不足なら深掘りしてください。";
     try{
       const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1400,system:AI_SYS,messages:[...nh,{role:"user",content:ip}]})});
+        body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:1400,system:AI_SYS,messages:[...nh,{role:"user",content:ip}]})});
       const d=await res.json();
       const at=d.content?.[0]?.text||"エラーが発生しました。";
       const match=at.match(/\{[\s\S]*"message"[\s\S]*\}/);
@@ -426,7 +426,7 @@ function FormMode({onDone,onBack}) {
     if(!text.trim())return;setPolF(fid);setLdP(true);
     try{
       const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,system:POLISH_SYS,
+        body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:800,system:POLISH_SYS,
           messages:[{role:"user",content:"以下のテキストを磨いてください：\n\n"+text}]})});
       const d=await res.json();setPolT(p=>({...p,[fid]:d.content?.[0]?.text||""}));
     }catch{alert("エラーが発生しました。");}setLdP(false);
@@ -554,7 +554,7 @@ function HybridEdit({draft,onDone,onBack}) {
     if(!text.trim())return;setPolF(fid);setLdP(true);
     try{
       const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,system:POLISH_SYS,
+        body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:800,system:POLISH_SYS,
           messages:[{role:"user",content:"以下のテキストをさらに磨いてください：\n\n"+text}]})});
       const d=await res.json();setPolT(p=>({...p,[fid]:d.content?.[0]?.text||""}));
     }catch{alert("エラー");}setLdP(false);
