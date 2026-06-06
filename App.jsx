@@ -329,7 +329,7 @@ function ChatMode({onDone,onBack}) {
       ?"ユーザーが「"+cur.id+"」に答えました：「"+text+"」\n\n全質問の回答が揃いました。収集情報："+JSON.stringify({...data,[cur.id]:text})+"\n\n感謝の一言を述べてからJSONを出力してください。"
       :"ユーザーが「"+cur.id+"」に答えました：「"+text+"」\n\n回答が十分なら「ありがとうございます！」と述べてから次の質問「Q"+(qi+2)+"："+nxt.q+"（ヒント："+nxt.hint+"）」を提示してください。情報不足なら深掘りしてください。";
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+      const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1400,system:AI_SYS,messages:[...nh,{role:"user",content:ip}]})});
       const d=await res.json();
       const at=d.content?.[0]?.text||"エラーが発生しました。";
@@ -425,7 +425,7 @@ function FormMode({onDone,onBack}) {
   const polish=async(fid,text)=>{
     if(!text.trim())return;setPolF(fid);setLdP(true);
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+      const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,system:POLISH_SYS,
           messages:[{role:"user",content:"以下のテキストを磨いてください：\n\n"+text}]})});
       const d=await res.json();setPolT(p=>({...p,[fid]:d.content?.[0]?.text||""}));
@@ -553,7 +553,7 @@ function HybridEdit({draft,onDone,onBack}) {
   const polish=async(fid,text)=>{
     if(!text.trim())return;setPolF(fid);setLdP(true);
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+      const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,system:POLISH_SYS,
           messages:[{role:"user",content:"以下のテキストをさらに磨いてください：\n\n"+text}]})});
       const d=await res.json();setPolT(p=>({...p,[fid]:d.content?.[0]?.text||""}));
